@@ -1,6 +1,6 @@
+import 'package:bmi_calculator/constants.dart';
 import 'package:flutter/cupertino.dart';
 
-const cardTextStyle = TextStyle(color: Color(0xFF8D8E98));
 const sizedBoxInCardsHeight = 15.0;
 const iconInCardSize = 80.0;
 
@@ -24,7 +24,7 @@ class IconContent extends StatelessWidget {
         ),
         Text(
           '$label',
-          style: cardTextStyle,
+          style: kCardTextStyle,
         )
       ],
     );
