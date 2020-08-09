@@ -1,6 +1,11 @@
+import 'package:bmi_calculator/bottom_button.dart';
+import 'package:bmi_calculator/calculator_brain.dart';
+import 'package:bmi_calculator/results_page.dart';
 import 'package:bmi_calculator/reusable_card.dart';
+import 'package:bmi_calculator/round_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -19,6 +24,7 @@ class _InputPageState extends State<InputPage> {
   Color femaleCardColor = kInactiveCardColor;
   double heightValue = 160.0;
   double weightValue = 60.0;
+  double ageValue = 22.0;
 
   @override
   Widget build(BuildContext context) {
@@ -123,10 +129,38 @@ class _InputPageState extends State<InputPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Text('WEIGHT',
-                          style: kCardTextStyle,),
-                        Text(weightValue.toString(),
-                        style: kCardValueStyle,)
+                        Text(
+                          'WEIGHT',
+                          style: kCardTextStyle,
+                        ),
+                        Text(
+                          weightValue.toString(),
+                          style: kCardValueStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.minus,
+                              onTapHandler: () {
+                                setState(() {
+                                  weightValue -= 0.5;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.plus,
+                              onTapHandler: () {
+                                setState(() {
+                                  weightValue += 0.5;
+                                });
+                              },
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     color: kActiveCardColor,
@@ -134,32 +168,67 @@ class _InputPageState extends State<InputPage> {
                 ),
                 Expanded(
                   child: ReusableCard(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          'AGE',
+                          style: kCardTextStyle,
+                        ),
+                        Text(
+                          ageValue.toString(),
+                          style: kCardValueStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.minus,
+                              onTapHandler: () {
+                                setState(() {
+                                  ageValue -= 0.5;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.plus,
+                              onTapHandler: () {
+                                setState(() {
+                                  ageValue += 0.5;
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                     color: kActiveCardColor,
                   ),
                 ),
               ],
             ),
           ),
-          Container(
-            color: kBottomContainerColor,
-            margin: EdgeInsets.only(top: 10.0),
-            width: double.infinity,
-            height: kBottomContainerHeight,
+          BottomButton(
+            title: 'CALCULATE',
+            onTap: () {
+              CalculatorBrain calc =
+                  CalculatorBrain(height: heightValue, weight: weightValue);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ResultsPage(
+                          score: calc.calculateBMI(),
+                          remark: calc.getRemark(),
+                          description: calc.getDescription(),
+                        )),
+              );
+            },
           )
         ],
       ),
     );
   }
 }
-class RoundIconButton extends StatelessWidget {
-  Function onTapHandler;
-  RoundIconButton({this.onTapHandler});
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: onTapHandler
-
-    );
-  }
-}
-
